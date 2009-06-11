@@ -1,0 +1,14 @@
+#labels Phase-Implementation,Phase-Requirements,Phase-Design
+#本项目的编码规范
+
+= Python =
+
+目前采用PEP 8, http://www.python.org/dev/peps/pep-0008/
+
+
+= 细节 =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
