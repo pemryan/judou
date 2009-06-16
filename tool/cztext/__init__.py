@@ -37,7 +37,7 @@ Scanwiches和ThisIsWhyYoureFat以拍色情照片态度来拍「食物」，二�
 4/9课后报告：NET-MBA网路成功案例分享四堂课《行销篇》
 My Brute对战小游戏经过４点精心设计，一周内爆红全地球！
 """
-    #长度单位是像素
+    #长度单位是像素,默认一中文为16px
     for i in range(1000):
         print cztext.cn_len_more_than(test_string,250)
     
