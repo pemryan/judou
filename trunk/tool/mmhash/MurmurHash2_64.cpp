@@ -1,19 +1,20 @@
 //-----------------------------------------------------------------------------
 // MurmurHash2, 64-bit versions, by Austin Appleby
-
+#include <stdint.h>
 // The same caveats as 32-bit MurmurHash2 apply here - beware of alignment 
 // and endian-ness issues if used across multiple platforms.
-
-typedef unsigned __int64 uint64_t;
+#define FNV_32_PRIME 0x01000193
+#if defined(__x86_64__) || defined(_M_X64)
 
 // 64-bit hash for 64-bit platforms
 
-uint64_t MurmurHash64A ( const void * key, int len, unsigned int seed )
+uint64_t MurmurHash2 ( const void * key, int len)
 {
 	const uint64_t m = 0xc6a4a7935bd1e995;
 	const int r = 47;
 
-	uint64_t h = seed ^ (len * m);
+	//uint64_t h = seed ^ (len * m);
+   	uint64_t h = FNV_32_PRIME ^ (len*m);
 
 	const uint64_t * data = (const uint64_t *)key;
 	const uint64_t * end = data + (len/8);
@@ -50,16 +51,16 @@ uint64_t MurmurHash64A ( const void * key, int len, unsigned int seed )
 
 	return h;
 } 
-
+#else
 
 // 64-bit hash for 32-bit platforms
 
-uint64_t MurmurHash64B ( const void * key, int len, unsigned int seed )
+uint64_t MurmurHash2 ( const void * key, int len)
 {
 	const unsigned int m = 0x5bd1e995;
 	const int r = 24;
 
-	unsigned int h1 = seed ^ len;
+	unsigned int h1 = FNV_32_PRIME ^ len;
 	unsigned int h2 = 0;
 
 	const unsigned int * data = (const unsigned int *)key;
@@ -103,4 +104,5 @@ uint64_t MurmurHash64B ( const void * key, int len, unsigned int seed )
 	h = (h << 32) | h2;
 
 	return h;
-} 
+}
+#endif
