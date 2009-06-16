@@ -1,3 +1,4 @@
+//http://murmurhash.googlepages.com/MurmurHash2_64.cpp
 //-----------------------------------------------------------------------------
 // MurmurHash2, 64-bit versions, by Austin Appleby
 #include <stdint.h>
@@ -60,6 +61,7 @@ uint64_t MurmurHash2 ( const void * key, int len)
 	const unsigned int m = 0x5bd1e995;
 	const int r = 24;
 
+    //unsigned int h1 = seed ^ len;
 	unsigned int h1 = FNV_32_PRIME ^ len;
 	unsigned int h2 = 0;
 
