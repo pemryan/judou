@@ -1,1 +1,0 @@
-from multi_pattern_search import MultiPatternSearch
