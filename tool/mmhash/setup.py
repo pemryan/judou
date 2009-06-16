@@ -2,7 +2,7 @@ from distutils.core import setup, Extension
 
 setup(
         name = 'mmhash',
-        version = '1.2',
+        version = '1.21',
         ext_modules = [
             Extension('mmhash', ['mmhash.cpp'],
                 extra_compile_args=['-O3', '-pipe',
@@ -10,6 +10,8 @@ setup(
             ],
         description="MurmurHash2 http://murmurhash.googlepages.com/",
         long_description="""
+Note:hash value for 32 and 64 isn't same , need fix , ...
+
 import mmhash
 print mmhash.get_hash(str(range(1000)))
 -1624558063
