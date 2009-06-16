@@ -1,0 +1,14 @@
+Metadata-Version: 1.0
+Name: mmseg
+Version: 1.1.2
+Summary: MMseg中文分词 Chinese Seg On MMSeg Algorithm
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: zsp007@gmail.com
+License: UNKNOWN
+Description: 
+        from mmseg import seg_txt
+        for i in seg_txt("最主要的更动是：张无忌最后没有选定自己的配偶。"):
+        print i
+        
+Platform: UNKNOWN
