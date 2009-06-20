@@ -1,4 +1,6 @@
+PKG-INFO
 README
+setup.cfg
 setup.py
 mmseg/__init__.py
 mmseg/mmseg.py
