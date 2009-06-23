@@ -1,9 +1,9 @@
 # -*- coding: utf-8
 # @desc: Keyword frequency helper tool.
+import re
 import logger
 import urllib
 import urllib2
-import re
 import threading
 
 class Parser(object):

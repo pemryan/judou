@@ -1,0 +1,50 @@
+细胞词库的词典构建工具
+
+== change log ==
+twinsant（蚂蚁） 2009-06-18 created.
+
+
+== 主要文件 ==
+
+|-- cell_dict.py         下载搜狗细胞词库
+|-- freq_helper.py       
+|-- judou_dict.py
+|-- logger.py
+|-- memcachedb.py
+`-- pinyin.py           Hakced hanzi2pinyin tool by twinsant
+
+== 安裝 ==
+依赖memcachedb，请自行构建。
+
+
+== 功能介紹 ==
+
+主要功能是：
+1、从下载的txt细胞词库文件抽取词构建sqlite数据库
+2、用搜索引擎查询词出现的频次
+
+在蚂蚁的R60上构建时间
+2009-06-18 17:42:38,251 INFO Done! Elapsed time 3:18:19.657159
+
+== 基本信息 ==
+sqlite> .schema dictionary
+CREATE TABLE dictionary (id integer primary key autoincrement, keyword text
+unique, length integer, leading, ending text, pinyin text, keyword_index
+text, freq integer, flag integer);
+
+sqlite> select count(*) from dictionary;
+4132207
+
+== 使用方法 ==
+
+
+
+== 其它 ==
+现在回头看当初写的代码，真是惨不忍睹啊。举例来说，有的地方用print、有的用logging、有的用自己封装的logger。
+http://code.google.com/p/judou/source/detail?r=17
+所以说，同学们，我这么烂的代码都敢公开，你们还害怕什么，有什么好代码，就放上来吧！
+
+细胞词库SQLite3格式数据库已经上传到ftp上：
+http://groups.google.com/group/judou/web/句读ftp资源共享
+
+

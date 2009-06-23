@@ -1,16 +1,17 @@
 # -*- coding: utf-8
 # @desc: Tool which Build judou dicionary from cell dicts.
-import logging
-import sqlite3
 import os
 import re
 import sys
-from datetime import datetime
+import sqlite3
+import logging
+from   datetime import datetime
 
-from pinyin import hanzi2pinyin
-from freq_helper import DiscoverWorker
 import logger
 import memcachedb
+from   pinyin  import hanzi2pinyin
+from   freq_helper  import DiscoverWorker
+
 
 def sizeof_fmt(num):
    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
