@@ -1,4 +1,6 @@
-#coding:utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from array import array
 from collections import defaultdict
 from multi_pattern_search import MultiPatternSearch

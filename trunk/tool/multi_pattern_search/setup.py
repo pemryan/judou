@@ -1,9 +1,12 @@
-#coding:utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 from setuptools import find_packages
 from distutils.core import Extension,setup
+
 setup(
     name = 'multi_pattern_search',
     version='1.0.0',

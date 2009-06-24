@@ -1,5 +1,5 @@
 /*
- *À´×ÔÎ°´óµÄÇ°±²redsea@gmail.com -- ÕÅÉòÅô¼Ç
+ *æ¥è‡ªä¼Ÿå¤§çš„å‰è¾ˆredsea@gmail.com -- å¼ æ²ˆé¹è®°
  *
  ****************************************************************************
  *
@@ -155,16 +155,16 @@ typedef struct {
 /*
 *   Prototypes
 */
-// id   :  pattern µ÷ÓÃ addPattern ¸øÃ÷µÄ id
-// index:  Æ¥ÅäÏîµÄ¿ªÍ·ÔÚÊäÈëÊı¾İÖĞµÄ offset
-// data : acsmSearch2µÄ data ²ÎÊı
+// id   :  pattern è°ƒç”¨ addPattern ç»™æ˜çš„ id
+// index:  åŒ¹é…é¡¹çš„å¼€å¤´åœ¨è¾“å…¥æ•°æ®ä¸­çš„ offset
+// data : acsmSearch2çš„ data å‚æ•°
 typedef int (*match_func_t)( void * id, int index, void * data );
 
 ACSM_STRUCT2 * acsmNew2 (void);
 
-// id ÊÇÓÃ»§¿ÉÒÔ¼ÓÈëµÄÊı¾İ, Æ¥Åä·¢ÏÖÖ®ºó, »á½«Õâ¸öÊı¾İ½»¸øÆ¥Åäº¯Êı
-// °¸ÀıÖĞµÄ main, ÊÇ½«Ô­Ê¼×Ö·û´®×÷Îª id ÁË.
-// iid Ò²ÊÇÒ»¸ö ? µ«ÊÇÑÛÏÂËÆºõÃ»ÓĞ±»Ê¹ÓÃ.
+// id æ˜¯ç”¨æˆ·å¯ä»¥åŠ å…¥çš„æ•°æ®, åŒ¹é…å‘ç°ä¹‹å, ä¼šå°†è¿™ä¸ªæ•°æ®äº¤ç»™åŒ¹é…å‡½æ•°
+// æ¡ˆä¾‹ä¸­çš„ main, æ˜¯å°†åŸå§‹å­—ç¬¦ä¸²ä½œä¸º id äº†.
+// iid ä¹Ÿæ˜¯ä¸€ä¸ª ? ä½†æ˜¯çœ¼ä¸‹ä¼¼ä¹æ²¡æœ‰è¢«ä½¿ç”¨.
 int acsmAddPattern2( ACSM_STRUCT2 * p, unsigned char * pat, int n,
                     int nocase, int offset, int depth, void *  id, int iid );
 

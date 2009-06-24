@@ -1,5 +1,5 @@
 /*
- * ¸ĞĞ»Î°´óĞ¤º£Í©Ç°±²µÄ×¢ÊÍ
+ * æ„Ÿè°¢ä¼Ÿå¤§è‚–æµ·æ¡å‰è¾ˆçš„æ³¨é‡Š
 +-------------------------------------------------------------
 | Storage Format   : Sparse Banded Matrix
 | Memory           : 1.00Mbytes
@@ -149,7 +149,7 @@ void LogMessage(const char *format,...){};
 *
 */
 static int max_memory = 0;
-static int num_alloc  = 0;  // ¶àÉÙ´ÎÄÚ´æ·ÖÅä
+static int num_alloc  = 0;  // å¤šå°‘æ¬¡å†…å­˜åˆ†é…
 
 /*
 *
@@ -170,7 +170,7 @@ typedef struct acsm_summary_s
 /*
 *
 */
-static acsm_summary_t summary; //!!! 0 ²»±ØÓÃ³õÊ¼»¯, ·ñÔònginx ±àÒëËµ³õÊ¼»¯²»Æë(acsm) ={0,0};
+static acsm_summary_t summary; //!!! 0 ä¸å¿…ç”¨åˆå§‹åŒ–, å¦åˆ™nginx ç¼–è¯‘è¯´åˆå§‹åŒ–ä¸é½(acsm) ={0,0};
 
 /*
 ** Case Translation Table
@@ -252,7 +252,7 @@ AC_MALLOC (int n)
   if (p)
   {
     //  max_memory += n;
-    max_memory += ((n + 0x0F) & ~0x0F) + 8;  // 16 ×Ö½Ú¶ÔÆë, ¼ÓÉÏÒ»Ğ©ÄÚ´æ¹ÜÀí¿ªÏú
+    max_memory += ((n + 0x0F) & ~0x0F) + 8;  // 16 å­—èŠ‚å¯¹é½, åŠ ä¸Šä¸€äº›å†…å­˜ç®¡ç†å¼€é”€
     num_alloc  ++;
   }
   return p;
@@ -1863,7 +1863,7 @@ acstate_t SparseGetNextStateNFA(acstate_t * ps, acstate_t state, unsigned  input
 
 
 /*
-*  ´Ó convert º¯ÊıµÄ×¢ÊÍÖĞ³­ÏÂÀ´µÄ.
+*  ä» convert å‡½æ•°çš„æ³¨é‡Šä¸­æŠ„ä¸‹æ¥çš„.
 *   Get the NextState from the DFA Next State Transition table
 *   Full and banded are supported separately, this is for
 *   sparse and sparse-bands
@@ -1963,16 +1963,16 @@ acstate_t SparseGetNextStateDFA(acstate_t * ps, acstate_t state, unsigned  input
 }
 
 /*
-²ÎÊı:
-	pTx,            Ö¸Ïò´ıËÑË÷ÄÚÈİµÄÖ¸Õë, ·µ»ØµÄÊ±ºò»á±»ĞŞ¸Ä
-	n               ÊÇÄÚÈİµÄ³¤¶È
-	Match           Æ¥ÅäÊ±µÄ»Øµ÷º¯Êı,·µ»Ø´óÓÚ0 µÄÊı, ÔòÍ£Ö¹²éÕÒ, ²¢ÇÒ·µ»ØÒÑ¾­Æ¥ÅäµÄÊıÄ¿
-		Match µÄ²ÎÊı:
-		id:      add pattern Ê±ºò¸øµÄ²ÎÊı
-		index:   Ä¿Ç°ÊÇ±¾´Î²éÕÒµÄ offset
-		data:    ²ÎÊıÖĞµÄ data4MatchFunc
-	data4MatchFunc  ÊÇµ÷ÓÃÉÏÃæº¯ÊıµÄÊ±ºò, ¸øµÄÒ»¸ö²ÎÊı
-	current_state   ÊÇÒ»¸öµ±Ç°µÄ×´Ì¬, Òò´Ë¿ÉÒÔÖØ¸´µ÷ÓÃ²éÕÒº¯Êı, ¶ÏµãĞø²é
+å‚æ•°:
+	pTx,            æŒ‡å‘å¾…æœç´¢å†…å®¹çš„æŒ‡é’ˆ, è¿”å›çš„æ—¶å€™ä¼šè¢«ä¿®æ”¹
+	n               æ˜¯å†…å®¹çš„é•¿åº¦
+	Match           åŒ¹é…æ—¶çš„å›è°ƒå‡½æ•°,è¿”å›å¤§äº0 çš„æ•°, åˆ™åœæ­¢æŸ¥æ‰¾, å¹¶ä¸”è¿”å›å·²ç»åŒ¹é…çš„æ•°ç›®
+		Match çš„å‚æ•°:
+		id:      add pattern æ—¶å€™ç»™çš„å‚æ•°
+		index:   ç›®å‰æ˜¯æœ¬æ¬¡æŸ¥æ‰¾çš„ offset
+		data:    å‚æ•°ä¸­çš„ data4MatchFunc
+	data4MatchFunc  æ˜¯è°ƒç”¨ä¸Šé¢å‡½æ•°çš„æ—¶å€™, ç»™çš„ä¸€ä¸ªå‚æ•°
+	current_state   æ˜¯ä¸€ä¸ªå½“å‰çš„çŠ¶æ€, å› æ­¤å¯ä»¥é‡å¤è°ƒç”¨æŸ¥æ‰¾å‡½æ•°, æ–­ç‚¹ç»­æŸ¥
 */
 /*
 *   Search Text or Binary Data for Pattern matches
@@ -1992,10 +1992,10 @@ acsmSearchSparseDFA(ACSM_STRUCT2 * acsm, unsigned char **pTx, int n,
   int               nfound = 0;
   unsigned char   * T, * Tc;
   int               index;
-  acstate_t      ** NextState = acsm->acsmNextState;   // Ã¿¸ö×´Ì¬µÄÏÂÒ»¸ö×´Ì¬, ¶¼¿ÉÒÔÔÚÕâÀïÕÒµ½
-  ACSM_PATTERN2  ** MatchList = acsm->acsmMatchList;   // Ã¿¸ö×´Ì¬µÄmatching, ¶¼¿ÉÒÔÔÚÕâÀïÕÒµ½
+  acstate_t      ** NextState = acsm->acsmNextState;   // æ¯ä¸ªçŠ¶æ€çš„ä¸‹ä¸€ä¸ªçŠ¶æ€, éƒ½å¯ä»¥åœ¨è¿™é‡Œæ‰¾åˆ°
+  ACSM_PATTERN2  ** MatchList = acsm->acsmMatchList;   // æ¯ä¸ªçŠ¶æ€çš„matching, éƒ½å¯ä»¥åœ¨è¿™é‡Œæ‰¾åˆ°
 
-  Tc   = *pTx;      // ¿ªÊ¼Î»ÖÃ
+  Tc   = *pTx;      // å¼€å§‹ä½ç½®
   T    = Tc;
   Tend = T + n;
 
@@ -2009,7 +2009,7 @@ acsmSearchSparseDFA(ACSM_STRUCT2 * acsm, unsigned char **pTx, int n,
 
   for( ; T < Tend; T++ )
   {
-      // Õâ¸ö·µ»Ø0, Ó¦¸Ã¾ÍÊÇµ±Ç°Ã»ÓĞÈÎºÎ match & match ÖĞµÄ item
+      // è¿™ä¸ªè¿”å›0, åº”è¯¥å°±æ˜¯å½“å‰æ²¡æœ‰ä»»ä½• match & match ä¸­çš„ item
       state = SparseGetNextStateDFA ( NextState[state], state, xlatcase[*T] );
 
 //      if (state == 0)
@@ -2021,12 +2021,12 @@ acsmSearchSparseDFA(ACSM_STRUCT2 * acsm, unsigned char **pTx, int n,
       /* test if this state has any matching patterns */
       if( NextState[state][1] )
       {
-        // ÕâÀïÃæµÄÃ¿Ò»Ïî, ¶¼ÊÇ match µÄ
+        // è¿™é‡Œé¢çš„æ¯ä¸€é¡¹, éƒ½æ˜¯ match çš„
         for( mlist = MatchList[state];
              mlist!= NULL;
              mlist = mlist->next )
         {
-             index = T - mlist->n - Tc + 1;    // Ä©Î²Î»ÖÃ - ³¤¶È, 
+             index = T - mlist->n - Tc + 1;    // æœ«å°¾ä½ç½® - é•¿åº¦, 
              if( mlist->nocase )
              {
                 nfound++;
@@ -2385,7 +2385,7 @@ acsmSearchSparseNFA(ACSM_STRUCT2 * acsm, unsigned char **pTx, int n,
 
 /*
 *   Search Function
-    Õâ¸ö±ØĞë·µ»Ø, ×Ô¼º´¦Àíµ½ÁËÊ²Ã´Î»ÖÃ
+    è¿™ä¸ªå¿…é¡»è¿”å›, è‡ªå·±å¤„ç†åˆ°äº†ä»€ä¹ˆä½ç½®
 */
 int acsmSearch2(ACSM_STRUCT2 * acsm, unsigned char ** pTx, int n,
            int (*Match) (void * id, int index, void *data),
