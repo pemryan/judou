@@ -193,7 +193,7 @@ def ch_seg(text, encoding=None):
 
     return ch_list
 
-def atom_seg(text, dict, encoding=None):
+def atom_seg(text, dict, encoding=None, export_word_graph=False):
     """Token(Atom) SEGmentation.
 
     Token or atom is each one Chinese character(Hanzi), number string and english word.
@@ -244,7 +244,7 @@ def bi_mm_seg(text, dict, encoding=None):
     rmm_l = rmm_seg(text, dict, encoding)
     return [i for i in set(mm_l) | set(rmm_l)]
 
-def mm_seg(text, dict, encoding=None):
+def mm_seg(text, dict, encoding=None, export_word_graph=False):
     """The (Forward) Maximum Match SEGmentation.
 
     Starting on the left and moving to the right, find the longest word that exists in the dictionary, until you get to the end of the sentence.
@@ -285,7 +285,7 @@ def mm_seg(text, dict, encoding=None):
 
     return word_list
 
-def rmm_seg(text, dict, encoding=None):
+def rmm_seg(text, dict, encoding=None, export_word_graph=False):
     """Reverse (Backward) Maximum Match SEGmentation.
 
     Conver string into unicode, then split it according the dictionary.
@@ -332,7 +332,7 @@ def rmm_seg(text, dict, encoding=None):
     word_list.reverse()
     return word_list
 
-def argmax_seg(text, dict, encoding=None):
+def argmax_seg(text, dict, encoding=None, export_word_graph=False):
     """Maximum Probability Method SEGmentation.
 
     Build word graph, find the best path.
@@ -526,7 +526,7 @@ class WordGraph(object):
         return wl
 
 
-def full_seg(text, dict, encoding=None):
+def full_seg(text, dict, encoding=None, export_word_graph=False):
     """FULL SEGmentation.
 
     """
@@ -541,7 +541,7 @@ def full_seg(text, dict, encoding=None):
     # Build word graph
     wg = WordGraph()
     wg.build_word_graph(_text, dict, encoding)
-    if logger.is_debug():
+    if logger.is_debug() or export_word_graph:
         wg.export_graph(text, dict)
 
     return wg.all_atoms()
@@ -567,40 +567,45 @@ if __name__ == '__main__':
     #print_foo_dict_mem_footprint()
     #print_sogou_dict_mem_footprint()
     test_cases = (
-            '结合成分子时',
-            '分词测试一',
-            '胡锦涛在中共中央政治局第三十八次集体学习时强调以创新的精神加强网络文化建设和管理满足人民群众日益增长的精神文化需要',
-            '我是中国人，不过我的语文不怎么好。',
-            '时间就是生命',
-            '在2000年我开始使用网名twinsant',
-            '张店区大学生不看重大城市的户口本',
-            '你认为学生会听老师的吗',
-            '计算语言学课程是三个课时',
-            '中华人民共和国',
-            '有意见分歧',
-            '为人民工作',
-            '中国产品质量',
-            '努力学习语法规则',
-            '这样的人才能经受住考验',
-            '学历史知识',
-            '这事的确定不下来',
-            '做完作业才能看电视',
-            '独立自主和平等互利的原则',
-            '他说的确实在理',
-            '联合国教科文组织',
-            '雪村先生创作了很多歌曲',
-            '词语破碎处，无物存在',
-            '圆周率是3.1415926',
-            '歼10击落F117',
-            '1979年那是一个春天有一位老人在中国的南海边画了一个圈',
-            '工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作',
+            ('结合成分子时',),
+            ('分词测试一',),
+            ('胡锦涛在中共中央政治局第三十八次集体学习时强调以创新的精神加强网络文化建设和管理满足人民群众日益增长的精神文化需要',),
+            ('我是中国人，不过我的语文不怎么好。',),
+            ('时间就是生命',),
+            ('在2000年我开始使用网名twinsant',),
+            ('张店区大学生不看重大城市的户口本',),
+            ('你认为学生会听老师的吗',),
+            ('计算语言学课程是三个课时',),
+            ('中华人民共和国',),
+            ('有意见分歧',),
+            ('为人民工作',),
+            ('中国产品质量',),
+            ('努力学习语法规则',),
+            ('这样的人才能经受住考验',),
+            ('学历史知识',),
+            ('这事的确定不下来',),
+            ('做完作业才能看电视',),
+            ('独立自主和平等互利的原则',),
+            ('他说的确实在理',),
+            ('联合国教科文组织',),
+            ('雪村先生创作了很多歌曲',),
+            ('词语破碎处，无物存在',),
+            ('圆周率是3.1415926',),
+            ('歼10击落F117',),
+            ('1979年那是一个春天有一位老人在中国的南海边画了一个圈',),
+            ('工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作', True),
 
             # invalid '1979年那是一个春天\n有一位老人在中国的南海边画了一个圈',
             )
 
     def test_case(seg, dict, n):
         print '-- Case %d by %s --' % (n, seg.__name__)
-        print ' '.join(seg(test_cases[n], dict, ENCODING))
+        if len(test_cases[n])>1:
+            export_word_graph = True
+        else:
+            export_word_graph = False
+        text = test_cases[n][0]
+        print ' '.join(seg(text, dict, encoding=ENCODING, export_word_graph=export_word_graph))
 
     def test_with_dict(DictClass):
         print '-- Load dictionary %s --' % DictClass.__name__
