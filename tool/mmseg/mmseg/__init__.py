@@ -1,18 +1,12 @@
 #coding:utf-8
 
+import mmseg
+mmseg.dict_load_defaults()
 def seg_txt(text):
-    import mmseg
-    mmseg.dict_load_defaults()
-    def _seg_txt(text):
-        algor = mmseg.Algorithm(text)
-        for tok in algor:
-            yield tok.text
+    algor = mmseg.Algorithm(text)
+    for tok in algor:
+        yield tok.text
 
-    r = _seg_txt(text)
-    global seg_txt
-    seg_txt = _seg_txt
-
-    return r
 
 
 if __name__ == "__main__":
