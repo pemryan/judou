@@ -542,7 +542,7 @@ def full_seg(text, dict, encoding=None, export_word_graph=False):
     wg = WordGraph()
     wg.build_word_graph(_text, dict, encoding)
     if logger.is_debug() or export_word_graph:
-        wg.export_graph(text, dict)
+        wg.export_graph2(text, dict)
 
     return wg.all_atoms()
 
@@ -601,7 +601,7 @@ if __name__ == '__main__':
     def test_case(seg, dict, n):
         print '-- Case %d by %s --' % (n, seg.__name__)
         if len(test_cases[n])>1:
-            export_word_graph = True
+            export_word_graph = test_cases[n][1]
         else:
             export_word_graph = False
         text = test_cases[n][0]
