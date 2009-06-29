@@ -7,7 +7,7 @@ static PyObject * get_unsigned_hash(PyObject *self,PyObject *args) {
     if(!PyArg_ParseTuple(args,"s#",&guid,&len)) {
         return NULL;
     }
-    uint32_t h =  MurmurHash2(guid,strlen(guid));
+    uint64_t h =  MurmurHash2(guid,strlen(guid));
     /* return Py_BuildValue("l",h); */
     return PyLong_FromUnsignedLong(h);
 }
@@ -18,7 +18,7 @@ static PyObject * get_hash(PyObject *self,PyObject *args) {
     if(!PyArg_ParseTuple(args,"s#",&guid,&len)) {
         return NULL;
     }
-    int32_t h =  MurmurHash2(guid,strlen(guid));
+    int64_t h =  MurmurHash2(guid,strlen(guid));
     /* return Py_BuildValue("l",h); */
 #if defined(__x86_64__) || defined(_M_X64)
     return PyInt_FromLong(h);
