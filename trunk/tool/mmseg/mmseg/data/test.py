@@ -1,4 +1,5 @@
 #coding:utf-8
+from __future__ import with_statement
 word_set = set()
 with open("words.dic") as  words:
     for i in words:
