@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 !!!Warning: this file has been patched by Steve Chu<stvchu@gmail.com> for MemcacheDB supports!!!
