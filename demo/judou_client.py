@@ -1,4 +1,6 @@
+#!/usr/binenv python
 # -*- coding: utf-8
+
 import socket
 import logger
 

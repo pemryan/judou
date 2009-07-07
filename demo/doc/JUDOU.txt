@@ -1,0 +1,64 @@
+judou 中文分詞
+
+== change log ==
+twinsant（蚂蚁） 2009-07-03 created.
+
+
+== 主要文件 ==
+|-- judou.py             句读MM和RMM算法文件，給定一段中文文本，給出分詞結果
+|-- word_dict.py         句读词典接口和实现
+|-- judou_server.py      judou server
+|-- judou_daemon_conf.py judou server設置文件
+|-- judou_daemon.py      judou daemon
+|-- judou_client.py      judou client
+|-- daemon.py            A generic daemon class
+|-- freq_helper.py       Keyword frequency helper tool.
+`-- logger.py
+
+
+== 安裝 ==
+judou.py：
+    * 需要python-networkx來生成詞圖，请自行安裝。
+    * 需要judou_dict.db3（400万细胞词库 ，SQLite3格式），請從judou項目網站下載。也可以
+      用本目錄下的词典构建工具自行構建。
+
+=== 基本信息 ===
+judou.py
+
+测试hongqn同学推荐的用例：
+
+工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作
+
+结果如下：
+
+-- Case 26 by atom_seg --
+工 信 处 女 干 事 每 月 经 过 下 属 科 室 都 要 亲 口 交 代 24 口 交 换 机 等 技 术 性 器 件 的 安 装 工 作
+-- Case 26 by mm_seg --
+工 信 处女 干事 每月 经过 下属 科室 都要 亲口 交代 24 口交 换机 等 技术性 器件 的安 装 工作
+-- Case 26 by rmm_seg --
+工 信 处女 干事 每月 经过 下属 科室 都要 亲口 交代 24 口 交换机 等 技术性 器件 的 安装 工作
+
+增加词条”工信处“后
+
+-- Case 26 by atom_seg --
+工 信 处 女 干 事 每 月 经 过 下 属 科 室 都 要 亲 口 交 代 24 口 交 换 机 等 技 术 性 器 件 的 安 装 工 作
+-- Case 26 by mm_seg --
+工信处 女干 事 每月 经过 下属 科室 都要 亲口 交代 24 口交 换机 等 技术性 器件 的安 装 工作
+-- Case 26 by rmm_seg --
+工 信 处女 干事 每月 经过 下属 科室 都要 亲口 交代 24 口 交换机 等 技术性 器件 的 安装 工作
+
+有待大家改进那;-） 
+
+词图已生成，可以直接到邮件组上传文件列表里看：
+http://groups.google.com/group/judou/files
+
+简单解释下：
+椭圆节点是词，^是字符串开始，$是字符串结尾。词旁边括号里的数值是词频（多数未统计学习出），节点连线上的数值是前后两个词连现的频次（利用搜索引擎统计），红实线为频次大于0的，黑虚线为频次为0的。
+
+其实各种消歧算法不过是找到一种有向图权重标注方法，然后求解最优路径。 
+
+=== 使用方法 ===
+運行前，需要到judou_daemon_conf.py中設定合適的參數。參考judou_daemon_conf_sample.py
+給出的設置樣例。
+
+

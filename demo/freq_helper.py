@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 # -*- coding: utf-8
+
 # @desc: Keyword frequency helper tool.
 import re
 import logger

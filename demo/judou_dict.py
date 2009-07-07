@@ -1,5 +1,8 @@
+#!/usr/bin/nenv python
 # -*- coding: utf-8
+
 # @desc: Tool which Build judou dicionary from cell dicts.
+
 import os
 import re
 import sys

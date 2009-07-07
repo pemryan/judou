@@ -1,5 +1,8 @@
+#!/usr/bin/env python
 # -*- coding: utf-8
+
 # @desc: Dictionary interface and implementations for Judou segmentation
+
 import os
 try:
     import sqlite3

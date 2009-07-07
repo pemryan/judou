@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8
 
-'''
-cell_dict.py
+'''cell_dict.py
+
 http://code.google.com/p/judou
 
 Description:
@@ -18,6 +18,7 @@ TODO:
 ChangeLog:
     * twinsant 2009-06-18 created
     * pem      2009-06-23 revised  to make it more readable
+    * pem      2009-07-07 revised
 '''
 
 import os
@@ -175,7 +176,7 @@ class CellDict:
         '''
         collect the dict specified by cell_id:
             grap the dict txt file
-            put into sqlitedb
+            put dict info into sqlitedb
         '''
         print 'Trying to collect cell dict with id = %d' % cell_id
 
@@ -240,22 +241,6 @@ class CellDict:
         print
         self.conn.commit()
 
-    def collect_all_cells(self, limit=1, reloadall=False):
-        '''
-        collect all cellls
-        '''
-        stats = self.get_cell_stats()
-        if limit > stats['max_cell_id'] or limit==-1:
-            limit = stats['max_cell_id']
-
-        cell_cursor = self.conn.cursor()
-        cell_cursor.execute('''
-                  create table if not exists cells (id primary key, name text, history_txt_id integer, last_update_time text, last_collect_time text, last_collect_error integer)
-                  ''')
-
-        for i in xrange(1, limit+1):
-            self.collect_cell(i, reloadall)
-
     def _get_total_cell_number(self):
         '''
         get the total number of cell dicts
@@ -299,25 +284,50 @@ class CellDict:
         return max_cell_id
 
 
-if __name__ == '__main__':
+def collect_all_cells(limit=1, reloadall=False):
+    '''collect cell dicts in bulk
+    for example:
+        collect_all_cells(10) will fetch the dicts with id=1~10
+    '''
     dic = CellDict()
-    print dic.get_cell_stats()
-    #print cd.get_cell_info(1)
-    info = dic.get_cell_info(0)
-    if info:
-        print info
-    #print
-    dic.collect_all_cells()
-    #dic.collect_cell(109, True) # script
-    #dic.collect_cell(11640) # 搜狗标准词库 Not public
-    #dic.collect_cell(11826) # 搜狗精选词库
-    #dic.collect_cell(11377) # 搜狗标准大词库
-    #dic.collect_cell(11817) # 搜狗万能词库
-    #dic.collect_cell(4)     # 网络流行新词
+    stats = dic.get_cell_stats()
+    print stats
 
-    #print
-    #dic.collect_cells(10, True)
-    # Unlimit collect
-    #dic.collect_cells(-1)
+    if limit > stats['max_cell_id'] or limit==-1:
+        limit = stats['max_cell_id']
+
+    cell_cursor = dic.conn.cursor()
+    cell_cursor.execute('''
+                create table if not exists cells (id primary key, name text, history_txt_id integer, last_update_time text, last_collect_time text, last_collect_error integer)
+                ''')
+
+    for i in xrange(1, limit+1):
+        dic.collect_cell(i, reloadall)
 
     dic.db_conn_close()
+
+#def main():
+    #dic = CellDict()
+    #print dic.get_cell_stats()
+    ##print cd.get_cell_info(1)
+    #info = dic.get_cell_info(0)
+    #if info:
+        #print info
+    ##print
+    #dic.collect_all_cells()
+    ##dic.collect_cell(109, True) # script
+    ##dic.collect_cell(11640) # 搜狗标准词库 Not public
+    ##dic.collect_cell(11826) # 搜狗精选词库
+    ##dic.collect_cell(11377) # 搜狗标准大词库
+    ##dic.collect_cell(11817) # 搜狗万能词库
+    ##dic.collect_cell(4)     # 网络流行新词
+
+    ##print
+    ##dic.collect_cells(10, True)
+    ## Unlimit collect
+    ##dic.collect_cells(-1)
+
+    #dic.db_conn_close()
+
+if __name__ == '__main__':
+    collect_all_cells(10)

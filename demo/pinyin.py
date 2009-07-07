@@ -1,11 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @desc: Hacked tool which convert hanzi to pinyin
-"""
 
-Hakced hanzi2pinyin tool by twinsant
+# @desc: Hacked tool which convert hanzi to pinyin
+
+"""Hakced hanzi2pinyin tool by twinsant
 
 ChangeLog:
-    2009-02-24 Chg: change output format from 'hanzi_pinyin1hanzi_pinyin2...' to "hanzi_pinyin1'hanzi_pinyi2'..."
+    2009-02-24 Chg:
+    change output format from 'hanzi_pinyin1hanzi_pinyin2...' to "hanzi_pinyin1'hanzi_pinyi2'..."
 
 original credits to: http://code.google.com/p/pyzh/
 
@@ -19,6 +21,7 @@ the PinYinDict is generated from xyb's pinyin_zopeext.py, using:
 
 Author: Junyong Pan from zopen.cn, panjy at zopen dot cn
 """
+
 import types
 
 PinYinDict = {

@@ -1,6 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Last Modifed: 
-"""But Another Chinese SEGmentation.
+
+# Last Modifed: July, 3 by twinsant
+
+"""JUDOU: Yet Another Chinese SEGmentation toolkit.
 
 Summary
 =======
@@ -8,20 +11,23 @@ Summary
 Problem: Given a block of Chinese text, split it into a set of "words".
 
 In: text, encoding of text
-Out: a list of words, could be the actural text above if join together, each word is the same encoding with text.
+Out: a list of words, could be the actural text above if join together,
+     each word is the same encoding with text.
 
-To keep it simple in loop, we choose unicode as internal encoding, refer to
-"Encoding Introduction" section for more information.
+To keep it simple in loop, we choose unicode as internal encoding, refer
+to "Encoding Introduction" section for more information.
 
 There are two basic problems in this task:
     * word definition
     * grain size of word
 
-In IR system grain size of word should be as small as posible, and word should focus in set of special term and name.
+In IR system grain size of word should be as small as posible, and word
+should focus in set of special term and name.
 
 Except above these, there are also some headaches we have to faced:
     * ambiguity segmentation: cause more rubish in search results
-    * new named entity: transliterated foreign words and names, abbreviations, and personal, organization and company names etc.
+    * new named entity: transliterated foreign words and names,
+      abbreviations, and personal, organization and company names etc.
     * varies way to written numbers
 
 Three approaches are available at a high level:
@@ -32,7 +38,8 @@ Three approaches are available at a high level:
 Approach disadvantage:
     * ST: data-sparseness
     * DT: size of and quality of the dictionary(domain-appropriate, out of date)
-    * HA: a dicionary with part-of-speech and word frequency info(1.2 million entries in business) should be updated several times a period of time
+    * HA: a dicionary with part-of-speech and word frequency info(1.2 million
+          entries in business) should be updated several times a period of time
 
 REF:
     * 切分歧义字段的综合性分级处理方法, 孙斌
@@ -78,7 +85,7 @@ Roadmap
   5.Data Structure: Word Graph.
   6.Maximum Probability Method(With unigram, is a special case of N-SP which N=1).
 
-  TODO: {
+  TODO:{
   7.Shortest Path(N-Shortest Path).
 
 * Statistic based approach: POS tagging and named entity recongnization
@@ -153,6 +160,7 @@ REF:
 
 ===============================================================================
 """
+
 import re
 from math import log
 import logger
@@ -160,7 +168,7 @@ import logger
 # major.minor.patch
 __revesion__ = '0.1.2'
 
-# Max word length set to 8
+# Max word length set to 4
 MAX_LEN = 4
 ENCODING = 'utf-8'
 

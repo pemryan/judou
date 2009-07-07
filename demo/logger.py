@@ -1,4 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # @desc: Logging wrapper
+
 import sys
 import logging
 from datetime import datetime
