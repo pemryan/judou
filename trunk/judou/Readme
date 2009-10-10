@@ -1,0 +1,32 @@
+/judou/
+
+此目錄下有兩部分內容：
+1）细胞词库的词典构建工具,位于dictionary目录下
+2）judou分詞工具
+
+== 主要文件 ==
+
+|-- judou.py             給定一段中文文本，給出分詞結果
+|-- judou_server.py      judou server
+|-- judou_daemon_conf.py judou server設置文件
+|-- judou_daemon.py      judou daemon
+|-- judou_client.py      judou client
+|-- daemon.py            A generic daemon class
+`-- pinyin.py            Hakced hanzi2pinyin tool by twinsant
+
+/judou/dictionary
+
+|-- cell_dict.py         下载搜狗细胞词库
+|-- word_dict.py
+|-- judou_dict.py
+|-- freq_helper.py
+|-- logger.py
+`-- memcachedb.py
+
+
+
+
+== 安裝和使用 ==
+請查看/doc目錄下的cell_dict.txt和judou.txt
+
+
