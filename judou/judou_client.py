@@ -2,7 +2,7 @@
 # -*- coding: utf-8
 
 import socket
-import logger
+import dictionary.logger as logger
 
 class JudouClient(object):
     def __init__(self, server_list):

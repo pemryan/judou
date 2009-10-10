@@ -4,4 +4,4 @@
 HOST='localhost'
 PORT=7788
 
-LOG_FILENAME='/var/log/judou.log'
+LOG_FILENAME='/tmp/judou.log'

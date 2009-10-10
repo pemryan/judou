@@ -8,7 +8,7 @@ import os, socket, string
 import logging
 import logging.handlers
 
-from word_dict import JudouDict
+from dictionary.word_dict import JudouDict
 from judou import argmax_seg, rmm_seg, mm_seg, full_seg, bi_mm_seg
 try:
     from judou_daemon_conf import LOG_FILENAME
