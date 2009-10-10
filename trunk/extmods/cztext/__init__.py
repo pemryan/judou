@@ -1,5 +1,8 @@
-#coding:utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import cztext
+
 if __name__ == "__main__":
     test_string = """[BetterExplained]如何有效地记忆与学习
 

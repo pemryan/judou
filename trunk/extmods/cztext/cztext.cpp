@@ -1,15 +1,17 @@
 #include <Python.h>
 #include <stdint.h>
-
 #include <iostream>
+
 using namespace std;
 
 static const unsigned EN_WIDTH=8;
 
+/* */
 inline unsigned char_length(unsigned char now) {
     if (now<=0x7F) {
         return EN_WIDTH;
-    } else if (0xC0<=now and now<=0xFD) {
+    }
+    else if (0xC0<=now and now<=0xFD) {
         return EN_WIDTH*2;
     }
     return 0;
@@ -33,7 +35,7 @@ inline unsigned c_overflow_ellipsis (const char* text,const unsigned text_length
     static const unsigned etc_width = EN_WIDTH*3;
     unsigned min_width=width-etc_width;
 
-    if (min_width<=0)return 0;
+    if (min_width<=0) return 0;
 
     unsigned now_width=0,pos=0;
 
@@ -56,7 +58,6 @@ inline unsigned c_overflow_ellipsis (const char* text,const unsigned text_length
         //cout<<"min_width "<<min_width<<endl;
         if (after_width>min_width) {
             //如果剩余文字少于"..."的长度就可以显示他们,而不是显示...
-
             unsigned pos2 = pos+1;
             while (text_length>pos2 and width>=after_width) {
                 after_width+=char_length(text[pos2]);
@@ -73,6 +74,7 @@ inline unsigned c_overflow_ellipsis (const char* text,const unsigned text_length
 stop:
     return pos;
 };
+
 static PyObject* etc = PyString_FromStringAndSize("...",3);
 static PyObject * overflow_ellipsis(PyObject *self,PyObject *args) {
     char * input;

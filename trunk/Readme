@@ -1,0 +1,26 @@
+目录结构
+
+judou
+|-- READ
+|-- setup.py
+|-- judou
+    |-- __init__.py
+    |-- dictionary
+        |-- __init__.py
+        |-- cell_dict.py
+        |-- judou_dict.py
+        `-- freq_helper.py
+    |-- client.py
+    `-- server.py 
+|-- extmods
+    |-- cztext
+    |-- frequent-items
+    |-- mmhash
+    |-- mmseg
+    |-- multi_pattern_search
+|-- scripts (可以用setuptools的console entry point自动生成)
+    |-- update_cell_dict
+    |-- judou-server
+    `-- judou (命令行版本)
+|-- examples
+`-- tests
