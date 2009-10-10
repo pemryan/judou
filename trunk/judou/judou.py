@@ -163,7 +163,7 @@ REF:
 
 import re
 from math import log
-import logger
+import dictionary.logger as logger
 
 # major.minor.patch
 __revesion__ = '0.1.2'
@@ -173,7 +173,7 @@ MAX_LEN = 4
 ENCODING = 'utf-8'
 
 # Dictionary based approach
-from word_dict import FooDict, SogouDict, JudouDict
+from dictionary.word_dict import FooDict, SogouDict, JudouDict
 
 # Preprocess segmentation
 def ch_seg(text, encoding=None):
