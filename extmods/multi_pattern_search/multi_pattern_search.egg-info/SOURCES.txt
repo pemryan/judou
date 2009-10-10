@@ -1,4 +1,5 @@
 README
+setup.cfg
 setup.py
 multi_pattern_search/__init__.py
 multi_pattern_search/keyword2group.py
@@ -10,7 +11,6 @@ multi_pattern_search.egg-info/not-zip-safe
 multi_pattern_search.egg-info/top_level.txt
 multi_pattern_search/cpp/acsmx2.c
 multi_pattern_search/cpp/acsmx2.h
-multi_pattern_search/cpp/compile.sh
 multi_pattern_search/cpp/search.cpp
 multi_pattern_search/cpp/search.hpp
 multi_pattern_search/cpp/search_py.cpp

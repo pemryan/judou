@@ -27,8 +27,8 @@ setup(
                 "multi_pattern_search/cpp/search.hpp"
             ],
             extra_compile_args=['-O3'],
-            include_dirs = ["/usr/local/include"],
-            library_dirs = ["/usr/local/lib"],
+            include_dirs = ["/usr/include"],
+            library_dirs = ["/usr/lib"],
             libraries=['boost_python'],
             language="c++",
         ),
