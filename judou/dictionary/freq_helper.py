@@ -186,6 +186,8 @@ class DiscoverWorker(threading.Thread):
                 self.done_func(self, self.id, k, f, i)
 
 if __name__ == '__main__':
+    import socket
+    socket.setdefaulttimeout(30)
     logger.init()
     logger.info('Keyword frequency helper tool.')
     t = logger.Timer()

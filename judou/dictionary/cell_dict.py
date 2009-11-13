@@ -330,4 +330,6 @@ def collect_all_cells(limit=1, reloadall=False):
     #dic.db_conn_close()
 
 if __name__ == '__main__':
+    import socket
+    socket.setdefaulttimeout(30)
     collect_all_cells(10)
