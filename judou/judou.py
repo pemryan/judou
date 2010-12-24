@@ -176,44 +176,53 @@ ENCODING = 'utf-8'
 from dictionary.word_dict import FooDict, SogouDict, JudouDict
 
 # Preprocess segmentation
-def ch_seg(text, encoding=None):
+def ch_seg(text):
     """CHaracter SEGmentation.
 
     Return a list with each item will be one character.
     """
-    # Internal unicode encoding
-    if encoding:
-        _text = text.decode(encoding)
-    else:
-        _text = text
-    assert type(_text) is unicode
-
     # Loop and append each character to list
     ch_list = []
-    if encoding:
-        for character in _text:
-            #yield character.encode(encoding)
-            ch_list.append(character.encode(encoding))
-    else:
-        for character in _text:
-            #yield character
-            ch_list.append(character)
 
+    for character in text:
+        #yield character
+        ch_list.append(character)
+                
     return ch_list
 
-def atom_seg(text, dict, encoding=None, export_word_graph=False):
+def localencoding(seg_func):
+    """
+    Decorate segmentors which can handle multiple encodings.
+    Input text are converted to internal unocode encodings,
+    and converted after the segmentation was done.
+    """
+
+    def seg(text, dict, *args, **kwargs):
+        encoding = kwargs.get('encoding', None)
+        if encoding:
+            kwargs.pop('encoding')
+            _text = text.decode(encoding)
+            assert type(_text) is unicode
+            word_list = seg_func(_text, dict, *args, **kwargs)
+            word_list = [w.encode(encoding) for w in word_list]
+        else:
+            word_list = seg_func(text, dict, *args, **kwargs)
+            
+        return word_list
+
+    seg.__name__ = seg_func.__name__
+
+    return seg
+
+@localencoding
+def atom_seg(text, dict, export_word_graph=False):
     """Token(Atom) SEGmentation.
 
     Token or atom is each one Chinese character(Hanzi), number string and english word.
     e.g. 在2000年我开始使用网名twinsant
     Tokens seperated by space: 在 2000 年 我 开 始 使 用 网 名 twinsant
     """
-    # Internal unicode encoding
-    if encoding:
-        _text = text.decode(encoding)
-    else:
-        _text = text
-    assert type(_text) is unicode
+
     atom_list = []
 
     # See Python Library Reference 4.2.6
@@ -223,48 +232,36 @@ def atom_seg(text, dict, encoding=None, export_word_graph=False):
     # NOT handled: Science format, etc.
     r = re.compile(r'[-+]?(\d+(\.\d*)?|\d*\.\d+)([eE][-+]?\d+)?|[-+]?(0[xX][\dA-Fa-f]+|0[0-7]*|\d+)|\w+')
     pos = 0
-    if encoding:
-        # Split items with each pattern
-        for mo in r.finditer(_text):
-            start, end = mo.span()
-            for c in _text[pos:start]:
-                atom_list.append(c.encode(encoding))
-            atom_list.append(_text[start:end].encode(encoding))
-            pos = end
-        for c in _text[pos:]:
-            atom_list.append(c.encode(encoding))
-    else:
-        # Same as above except not encode each item
-        for mo in r.finditer(_text):
-            start, end = mo.span()
-            for c in _text[pos:start]:
-                atom_list.append(c)
-            atom_list.append(_text[start:end])
-            pos = end
-        for c in _text[pos:]:
+
+    for mo in r.finditer(text):
+        start, end = mo.span()
+        for c in text[pos:start]:
             atom_list.append(c)
+        atom_list.append(text[start:end])
+        pos = end
+    for c in text[pos:]:
+        atom_list.append(c)
+        
     if not atom_list:
-        atom_list = ch_seg(_text)
+        atom_list = ch_seg(text)
+        
     return atom_list
 
+@localencoding
 def bi_mm_seg(text, dict, encoding=None):
     mm_l = mm_seg(text, dict, encoding)
     rmm_l = rmm_seg(text, dict, encoding)
     return [i for i in set(mm_l) | set(rmm_l)]
 
-def mm_seg(text, dict, encoding=None, export_word_graph=False):
+@localencoding
+def mm_seg(text, dict, export_word_graph=False):
     """The (Forward) Maximum Match SEGmentation.
 
     Starting on the left and moving to the right, find the longest word that exists in the dictionary, until you get to the end of the sentence.
     Precision: about 1/169
     """
-    # Internal unicode encoding
-    if encoding:
-        _text = text.decode(encoding)
-    else:
-        _text = text
-    assert type(_text) is unicode
-    atom_list = atom_seg(_text, dict)
+
+    atom_list = atom_seg(text, dict)
 
     word_list = []
     idx_s = 0
@@ -274,38 +271,34 @@ def mm_seg(text, dict, encoding=None, export_word_graph=False):
         # Search word match in dictionary
         while idx_e - 1 > idx_s:
             word = ''.join(atom_list[idx_s:idx_e])
-            #dbprint('atom_list[%d:%d]=%s' % (idx_s, idx_e, word.encode(encoding)))
+            #dbprint('atom_list[%d:%d]=%s' % (idx_s, idx_e, word))
             if word in dict:
                 found = True
-                #yield word.encode(encoding)
-                word_list.append(word.encode(encoding))
+                #yield word
+                word_list.append(word)
                 break
             idx_e -= 1
         # Hanzi
         if not found:
             word = ''.join(atom_list[idx_s:idx_e])
-            #dbprint('Single char %s' % word.encode(encoding))
-            #yield word.encode(encoding)
-            word_list.append(word.encode(encoding))
+            #dbprint('Single char %s' % word)
+            #yield word
+            word_list.append(word)
 
         idx_s = idx_e
         idx_e = idx_s + MAX_LEN # Python handle out of index
 
     return word_list
 
-def rmm_seg(text, dict, encoding=None, export_word_graph=False):
+@localencoding
+def rmm_seg(text, dict, export_word_graph=False):
     """Reverse (Backward) Maximum Match SEGmentation.
 
     Conver string into unicode, then split it according the dictionary.
     Precision: about 1/245
     """
-    # Internal unicode encoding
-    if encoding:
-        _text = text.decode(encoding)
-    else:
-        _text = text
-    assert type(_text) is unicode
-    atom_list = atom_seg(_text, dict)
+
+    atom_list = atom_seg(text, dict)
 
     idx_e = len(atom_list)
     idx_s = idx_e - MAX_LEN
@@ -318,29 +311,32 @@ def rmm_seg(text, dict, encoding=None, export_word_graph=False):
         # Search word match in dictionary
         while idx_s + 1 < idx_e:
             word = ''.join(atom_list[idx_s:idx_e])
-            #dbprint('atom_list[%d:%d]=%s' % (idx_s, idx_e, word.encode(encoding)))
+            #dbprint('atom_list[%d:%d]=%s' % (idx_s, idx_e, word))
             if word in dict:
                 found = True
-                #dbprint('Word atom_list[%d:%d]=%s' % (idx_s, idx_e, word.encode(encoding)))
-                #yield word.encode(encoding)
-                word_list.append(word.encode(encoding))
+                #dbprint('Word atom_list[%d:%d]=%s' % (idx_s, idx_e, word))
+                #yield word
+                word_list.append(word)
                 break
             idx_s += 1
         # Hanzi
         if not found:
             word = ''.join(atom_list[idx_s:idx_e])
-            #dbprint('Single char atom_list[%d:%d]=%s' % (idx_s, idx_e, word.encode(encoding)))
-            #yield word.encode(encoding)
-            word_list.append(word.encode(encoding))
+            #dbprint('Single char atom_list[%d:%d]=%s' % (idx_s, idx_e, word))
+            #yield word
+            word_list.append(word)
 
         idx_e = idx_s
         idx_s = idx_e - MAX_LEN
         if idx_s < 0:
             idx_s = 0
     word_list.reverse()
+
+
     return word_list
 
-def argmax_seg(text, dict, encoding=None, export_word_graph=False):
+@localencoding
+def argmax_seg(text, dict, export_word_graph=False):
     """Maximum Probability Method SEGmentation.
 
     Build word graph, find the best path.
@@ -366,22 +362,16 @@ def argmax_seg(text, dict, encoding=None, export_word_graph=False):
     (时              ,   6.865372,  32.758294,   (5, 6))
     结合 成 分子 时
     """
-    # Internal unicode encoding
-    if encoding:
-        _text = text.decode(encoding)
-    else:
-        _text = text
-    assert type(_text) is unicode
 
     # Build word graph
     wg = WordGraph()
-    wg.build_word_graph(_text, dict, encoding)
+    wg.build_word_graph(text, dict)
 
     # Find the best path according Maximum Probability
     return wg.find_best_path()
 
 class WordGraph(object):
-    def build_word_graph(self, _text, dict, encoding):
+    def build_word_graph(self, _text, dict):
         self.atom_list = atom_seg(_text, dict)
 
         self.word_graph = []
@@ -424,12 +414,12 @@ class WordGraph(object):
         #print best_word_list
 
         # Build the words
-        w_l = [self.word_graph[i][0].encode('utf-8') for i in best_word_list]
+        w_l = [self.word_graph[i][0] for i in best_word_list]
         w_l.reverse()
         return w_l
 
     def all_atoms(self):
-        return [w[0].encode('utf-8') for w in self.word_graph if w[0] and w[0] not in (u'^', u'$')]
+        return [w[0] for w in self.word_graph if w[0] and w[0] not in (u'^', u'$')]
 
     def find_best_prob(self, idx_s):
         """Find prev best probability before the word.
@@ -464,8 +454,8 @@ class WordGraph(object):
             pw = self.word_graph[i][0]
             pid = i
             def to_node_label(w, id):
-                #return '%d. %s(%.2f)' % (id, w.encode('utf-8'), dict[w]) # rich format
-                return '%s' % (w.encode('utf-8'),)
+                #return '%d. %s(%.2f)' % (id, w.encode(ENCODING), dict[w]) # rich format
+                return '%s' % w
             prev_word_label = to_node_label(pw, pid)
             next_words = self.find_next_words(i)
             for next_word in next_words:
@@ -502,7 +492,7 @@ class WordGraph(object):
             pw = self.word_graph[i][0]
             pid = i
             def to_node_label(w, id):
-                return '%d. %s(%.2f)' % (id, w.encode('utf-8'), dict[w]) # rich format
+                return '%d. %s(%.2f)' % (id, w, dict[w]) # rich format
             prev_word_label = to_node_label(pw, pid)
             next_words = self.find_next_words(i)
             for next_word in next_words:
@@ -534,21 +524,17 @@ class WordGraph(object):
         return wl
 
 
-def full_seg(text, dict, encoding=None, export_word_graph=False):
-    """FULL SEGmentation.
-
+@localencoding
+def full_seg(text, dict, export_word_graph=False):
     """
-    # Internal unicode encoding
-    if encoding:
-        _text = text.decode(encoding)
-    else:
-        _text = text
-    assert type(_text) is unicode
-    atom_list = atom_seg(_text, dict)
+    FULL SEGmentation.
+    """
+
+    atom_list = atom_seg(text, dict)
 
     # Build word graph
     wg = WordGraph()
-    wg.build_word_graph(_text, dict, encoding)
+    wg.build_word_graph(text, dict)
     if logger.is_debug() or export_word_graph:
         wg.export_graph2(text, dict)
 
@@ -576,33 +562,32 @@ if __name__ == '__main__':
     #print_sogou_dict_mem_footprint()
     test_cases = (
             ('结合成分子时',),
-            ('分词测试一',),
-            ('胡锦涛在中共中央政治局第三十八次集体学习时强调以创新的精神加强网络文化建设和管理满足人民群众日益增长的精神文化需要',),
-            ('我是中国人，不过我的语文不怎么好。',),
-            ('时间就是生命',),
-            ('在2000年我开始使用网名twinsant',),
-            ('张店区大学生不看重大城市的户口本',),
-            ('你认为学生会听老师的吗',),
-            ('计算语言学课程是三个课时',),
-            ('中华人民共和国',),
-            ('有意见分歧',),
-            ('为人民工作',),
-            ('中国产品质量',),
-            ('努力学习语法规则',),
-            ('这样的人才能经受住考验',),
-            ('学历史知识',),
-            ('这事的确定不下来',),
-            ('做完作业才能看电视',),
-            ('独立自主和平等互利的原则',),
-            ('他说的确实在理',),
-            ('联合国教科文组织',),
-            ('雪村先生创作了很多歌曲',),
-            ('词语破碎处，无物存在',),
-            ('圆周率是3.1415926',),
-            ('歼10击落F117',),
-            ('1979年那是一个春天有一位老人在中国的南海边画了一个圈',),
-            ('工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作', True),
-
+             ('分词测试一',),
+             ('胡锦涛在中共中央政治局第三十八次集体学习时强调以创新的精神加强网络文化建设和管理满足人民群众日益增长的精神文化需要',),
+             ('我是中国人，不过我的语文不怎么好。',),
+             ('时间就是生命',),
+             ('在2000年我开始使用网名twinsant',),
+             ('张店区大学生不看重大城市的户口本',),
+             ('你认为学生会听老师的吗',),
+             ('计算语言学课程是三个课时',),
+             ('中华人民共和国',),
+             ('有意见分歧',),
+             ('为人民工作',),
+             ('中国产品质量',),
+             ('努力学习语法规则',),
+             ('这样的人才能经受住考验',),
+             ('学历史知识',),
+             ('这事的确定不下来',),
+             ('做完作业才能看电视',),
+             ('独立自主和平等互利的原则',),
+             ('他说的确实在理',),
+             ('联合国教科文组织',),
+             ('雪村先生创作了很多歌曲',),
+             ('词语破碎处，无物存在',),
+             ('圆周率是3.1415926',),
+             ('歼10击落F117',),
+             ('1979年那是一个春天有一位老人在中国的南海边画了一个圈',),
+             ('工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作', True),
             # invalid '1979年那是一个春天\n有一位老人在中国的南海边画了一个圈',
             )
 
@@ -613,7 +598,8 @@ if __name__ == '__main__':
         else:
             export_word_graph = False
         text = test_cases[n][0]
-        print ' '.join(seg(text, dict, encoding=ENCODING, export_word_graph=export_word_graph))
+        res = ' '.join(seg(text, dict, encoding=ENCODING, export_word_graph=export_word_graph))
+        print res.decode(ENCODING)
 
     def test_with_dict(DictClass):
         print '-- Load dictionary %s --' % DictClass.__name__
@@ -624,11 +610,12 @@ if __name__ == '__main__':
             test_case(mm_seg, d, i)
             test_case(rmm_seg, d, i)
             test_case(argmax_seg, d, i)
-            test_case(full_seg, d, i)
+            # test_case(full_seg, d, i)
             print
 
     logger.init()
-    for c in (JudouDict,):# SogouDict, FooDict):
+    #for c in (JudouDict,):# SogouDict, FooDict):
+    for c in (SogouDict,):# SogouDict, FooDict):
         t = logger.Timer()
         t.start()
         test_with_dict(c)
