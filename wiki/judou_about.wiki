@@ -1,6 +1,19 @@
 #summary One-sentence summary of this page.
 #labels Featured
 
+= 双文档 =
+
+蚂蚁个人不太适应Google Code的wiki，现采用2个wiki文档系统：
+
+  * Google Code的wiki
+  * [http://judou.org/trac/ 句读Trac]
+
+= 三仓库 =
+
+  * Google Code作为共有的
+  * [http://svn.judou.org/ 句读仓库]作为网站源码和蚂蚁的试验场
+  * GitHub作为分权仓库
+
 = 摘要 =
 
 本文闡述“句讀”項目之緣起，定位與發展目標。
