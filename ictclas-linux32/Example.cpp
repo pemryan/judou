@@ -119,6 +119,13 @@ void SplitGBK(const char *sInput)
 		printf("%s\nInput string now('q' to quit)!\n", prepare_output(sResult));
 
 		scanf("%s", sSentence);
+                open_output("GB18030", "UTF-8");
+                char *p = prepare_output(sSentence);
+                strcpy(sSentence, p);
+                sSentence[strlen(p)+1] = NULL;
+                open_output("UTF-8", "GB18030");
+                p = prepare_output(sSentence);
+                printf("%s\n", p);
 	}
 	
 	//导入用户词典前
@@ -185,14 +192,15 @@ int main()
 	SplitGBK(sInput);
 	SplitUTF8();
 	
-        char buf[1024];
-        scanf("%s", buf);
-        open_output("GB18030", "UTF-8");
-        char *p = prepare_output(buf);
-        strcpy(buf, p);
-        open_output("UTF-8", "GB18030");
-        char *p = prepare_output(buf);
-        printf("%s\n", p);
+        //char buf[1024];
+        //scanf("%s", buf);
+        //open_output("GB18030", "UTF-8");
+        //char *p = prepare_output(buf);
+        //strcpy(buf, p);
+        //open_output("UTF-8", "GB18030");
+        //p = prepare_output(buf);
+        //printf("%s\n", p);
+
         close_output();
 	return 1;
 }
