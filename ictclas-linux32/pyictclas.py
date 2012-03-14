@@ -41,6 +41,7 @@ class ICTCLAS(object):
         ('_import_user_dict', '_Z22ICTCLAS_ImportUserDictPKc', [c_char_p], c_uint),
         ('_paragraph_process', '_Z24ICTCLAS_ParagraphProcessPKci', [c_char_p, c_int], c_char_p),
         ('_paragraph_process_a', '_Z25ICTCLAS_ParagraphProcessAPKcPi', [c_char_p, c_void_p], POINTER(c_result)),
+        ('_paragraph_process_e', '_Z25ICTCLAS_ParagraphProcessEPKcPci', [c_char_p, c_char_p, c_void_p], POINTER(c_result)),
         ('_paragraph_process_aw', '_Z26ICTCLAS_ParagraphProcessAWiP8result_t', [], c_int),
         ('_get_prragraph_processa_word_count', '_Z37ICTCLAS_GetParagraphProcessAWordCountPKc', [], c_int),
     ]
@@ -51,12 +52,18 @@ class ICTCLAS(object):
     NO_TAG = 0
     TAGGING = 1
 
+    LIB_SO = 'libICTCLAS2011.so'
+
     def __init__(self):
-        self.dir = os.path.abspath(os.path.dirname(__file__))
-        self.lib_so = os.path.join(self.dir, 'libICTCLAS2011.so')
+        lib_path = os.path.realpath(__file__)
+        self.dir = os.path.abspath(os.path.dirname(lib_path))
+        self.lib_so = os.path.join(self.dir, self.LIB_SO)
 
     def init(self):
-        self.ld = cdll.LoadLibrary(self.lib_so)
+        try:
+            self.ld = cdll.LoadLibrary(self.lib_so)
+        except OSError:
+            self.ld = cdll.LoadLibrary(self.LIB_SO)
         for name, export_name, argtypes, restype in self.EXPORTS:
             setattr(self, name, getattr(self.ld, export_name))
             func = getattr(self, name)
