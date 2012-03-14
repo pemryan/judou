@@ -125,7 +125,6 @@ void SplitGBK(const char *sInput)
                 sSentence[strlen(p)+1] = NULL;
                 open_output("UTF-8", "GB18030");
                 p = prepare_output(sSentence);
-                printf("%s\n", p);
 	}
 	
 	//导入用户词典前
