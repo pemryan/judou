@@ -8,15 +8,23 @@ def stats(c, stats):
         stats[c] = 1
 
 if __name__ == '__main__':
+    from optparse import OptionParser
+
+    parser = OptionParser()
+    parser.add_option('-U', '--without-user-dict', dest='without_user_dict', action="store_true", default=False)
+    parser.add_option('-O', '--output', dest='output', action="store", type="string", default="whitespace")
+    (options, args) = parser.parse_args()
+
     ictclas.init()
 
-    f = open('./cell/userdic-utf8.txt')
-    line = f.readline()
-    while line:
-        w = line.strip()
-        ictclas.add_user_word(w, 'ns')
+    if options.without_user_dict == False:
+        f = open('./cell/userdic-utf8.txt')
         line = f.readline()
-    f.close()
+        while line:
+            w = line.strip()
+            ictclas.add_user_word(w, 'ns')
+            line = f.readline()
+        f.close()
 
     total = 0
     ansi = {}
@@ -37,14 +45,20 @@ if __name__ == '__main__':
                 stats(c, ansi)
             stats(c, chars)
         wline = ictclas.process(line)
-        print wline
+        if options.output == 'whitespace':
+            print wline
         wc = wline.split(' ')
         for w in wc:
             if w.strip():
                 stats(w, words)
-        print len(ansi), len(chars), len(words), total
+        if options.output == 'whitespace':
+            print len(ansi), len(chars), len(words), total
         line = f.readline()
 
     f.close()
+
+    if options.output == 'words':
+        for w, c in words.items():
+            print w, c
 
     ictclas.exit()
