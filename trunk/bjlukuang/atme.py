@@ -1,5 +1,8 @@
 # -*- coding: utf-8
 from pyictclas import ictclas
+from pybamboo import bamboo
+from pysegment import pyseg
+
 
 def stats(c, stats):
     if c in stats:
@@ -13,16 +16,23 @@ if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option('-U', '--without-user-dict', dest='without_user_dict', action="store_true", default=False)
     parser.add_option('-O', '--output', dest='output', action="store", type="string", default="whitespace")
+    parser.add_option('-S', '--segmenter', dest='segmenter', action="store", type="string", default="ictclas")
     (options, args) = parser.parse_args()
 
-    ictclas.init()
+    if options.segmenter == 'ictclas':
+        segmenter = ictclas
+    elif options.segmenter == 'bamboo':
+        segmenter = bamboo
+    elif options.segmenter == 'pyseg':
+        segmenter = pyseg
+    segmenter.init()
 
     if options.without_user_dict == False:
         f = open('./cell/userdic-utf8.txt')
         line = f.readline()
         while line:
             w = line.strip()
-            ictclas.add_user_word(w, 'ns')
+            segmenter.add_user_word(w, 'ns')
             line = f.readline()
         f.close()
 
@@ -44,7 +54,7 @@ if __name__ == '__main__':
             if ord(c)<=255:
                 stats(c, ansi)
             stats(c, chars)
-        wline = ictclas.process(line)
+        wline = segmenter.process(line)
         if options.output == 'whitespace':
             print wline
         wc = wline.split(' ')
@@ -61,4 +71,4 @@ if __name__ == '__main__':
         for w, c in words.items():
             print w, c
 
-    ictclas.exit()
+    segmenter.exit()
