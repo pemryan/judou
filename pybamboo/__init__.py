@@ -43,4 +43,10 @@ class Bamboo:
     def clean(self):
         self._clean(self._handler)
 
+    def exit(self):
+        self.clean()
+
+    def add_user_word(self, w, pos):
+        pass
+
 bamboo = Bamboo()
